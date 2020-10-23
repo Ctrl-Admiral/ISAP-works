@@ -1,0 +1,3 @@
+[submodule "libakrypt-0.x"]
+	path = libakrypt-0.x
+	url = https://github.com/Ctrl-Admiral/libakrypt-0.x.git

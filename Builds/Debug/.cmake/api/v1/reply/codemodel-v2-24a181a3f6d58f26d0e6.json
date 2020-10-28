@@ -1,0 +1,183 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "libakrypt-0.x",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "libakrypt-0.x",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "PAZI_Jacobi_intersections",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "libakrypt-0.8.4",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "PAZI_Jacobi_intersections::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-PAZI_Jacobi_intersections-975c6cf846c750895e31.json",
+					"name" : "PAZI_Jacobi_intersections",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "akrypt-shared::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-akrypt-shared-03c43adb8662ac264b5f.json",
+					"name" : "akrypt-shared",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "akrypt-static::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-akrypt-static-0fae9e249d73ecc09a64.json",
+					"name" : "akrypt-static",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "aktool::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-aktool-b91f1d3a02d741b2e6b2.json",
+					"name" : "aktool",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "dist::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-dist-a3476bcda86e15276b42.json",
+					"name" : "dist",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example-hello::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-example-hello-8d72393ddbe1ec67568d.json",
+					"name" : "example-hello",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example-icode::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-example-icode-ab05e019302444ea12cb.json",
+					"name" : "example-icode",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example-ini::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-example-ini-6c8f8741d3e73cf11dae.json",
+					"name" : "example-ini",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example-log::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-example-log-a652ae3e93b11f539e56.json",
+					"name" : "example-log",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "example-oid::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-example-oid-7f8393fc585988f7a40b.json",
+					"name" : "example-oid",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@520fb9ff77a9bb828ccd",
+					"jsonFile" : "target-uninstall-1fc05505943c120e0010.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ettafury/Projects/PAZI_Jacobi_intersections/Builds/Debug",
+		"source" : "/home/ettafury/Projects/PAZI_Jacobi_intersections"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 1
+	}
+}

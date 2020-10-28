@@ -1,3 +1,0 @@
-/home/ettafury/Projects/PAZI_Jacobi_intersections/Builds/Release/CMakeFiles/rebuild_cache.dir
-/home/ettafury/Projects/PAZI_Jacobi_intersections/Builds/Release/CMakeFiles/edit_cache.dir
-/home/ettafury/Projects/PAZI_Jacobi_intersections/Builds/Release/CMakeFiles/PAZI_Jacobi_intersections.dir

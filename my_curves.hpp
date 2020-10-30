@@ -9,6 +9,10 @@
 namespace my
 {
 
+void mul256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p);
+
+void add256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p);
+
 class ProjecticPoint
 {
 public:
@@ -64,8 +68,8 @@ public:
     Curve() = delete;
 
     Curve(const ak_uint64& size,
-          const char* p_str, const char* q_str, ProjecticPoint point, ak_uint64 n, const char* k2_str)
-        :size_(size), point_(point), n_(n)
+          const char* p_str, const char* q_str, ProjecticPoint point, const char* k2_str)
+        :size_(size), point_(point)
     {
         ak_mpzn256 p, q, k2;
         ak_mpzn_set_hexstr(p, ak_mpzn256_size, p_str);
@@ -83,7 +87,6 @@ public:
     ak_uint64* q() { return q_; }
     const ak_uint64* k2() const { return k2_; }
     ak_uint64* k2() { return k2_; }
-    ak_uint64 n() const { return n_; }
 
     const ak_uint64* px0() const { return point_.x0(); }
     ak_uint64* px0() { return point_.x0(); }
@@ -104,7 +107,6 @@ private:
     ak_mpzn256 p_;      // modulo
     ak_mpzn256 q_;
     ProjecticPoint point_;
-    ak_uint64 n_;       // for Montgomery
     ak_mpzn256 k2_;     // cofficient of proj curve
 };
 

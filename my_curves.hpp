@@ -51,7 +51,8 @@ public:
     ak_uint64* x3() { return x3_; }
 
     //friend ProjecticPoint operator+ (ProjecticPoint& lhs, ProjecticPoint& rhs);
-    friend bool operator== (ProjecticPoint& lhs, ProjecticPoint& rhs);
+    friend bool operator== (ProjecticPoint& p1, ProjecticPoint& p2);
+    friend std::ostream& operator<<(std::ostream& stream, ProjecticPoint& entry);
 
 private:
     ak_mpzn256 x0_, x1_, x2_, x3_;
@@ -62,15 +63,11 @@ class Curve
 public:
     Curve() = delete;
 
-    Curve(const ak_uint64& size, const char* a_str, const char* b_str,
+    Curve(const ak_uint64& size,
           const char* p_str, const char* q_str, ProjecticPoint point, ak_uint64 n, const char* k2_str)
         :size_(size), point_(point), n_(n)
     {
-        ak_mpzn256 a, b, p, q, k2;
-        ak_mpzn_set_hexstr(a, ak_mpzn256_size, a_str);
-        ak_mpzn_set(a_, a, ak_mpzn256_size);
-        ak_mpzn_set_hexstr(b, ak_mpzn256_size, b_str);
-        ak_mpzn_set(b_, b, ak_mpzn256_size);
+        ak_mpzn256 p, q, k2;
         ak_mpzn_set_hexstr(p, ak_mpzn256_size, p_str);
         ak_mpzn_set(p_, p, ak_mpzn256_size);
         ak_mpzn_set_hexstr(q, ak_mpzn256_size, q_str);
@@ -80,16 +77,13 @@ public:
     }
 
     ak_uint64 size() const { return size_; }
-    const ak_uint64* a() const { return a_; }
-    ak_uint64* a() { return a_; }
-    const ak_uint64* b() const { return b_; }
-    ak_uint64* b() { return b_; }
     const ak_uint64* p() const { return p_; }
     ak_uint64* p() { return p_; }
     const ak_uint64* q() const { return q_; }
     ak_uint64* q() { return q_; }
     const ak_uint64* k2() const { return k2_; }
     ak_uint64* k2() { return k2_; }
+    ak_uint64 n() const { return n_; }
 
     const ak_uint64* px0() const { return point_.x0(); }
     ak_uint64* px0() { return point_.x0(); }
@@ -106,14 +100,15 @@ public:
     ProjecticPoint point_pow(ProjecticPoint& p, ak_uint64* k, const std::size_t& size);
 
 private:
-    ak_uint64 size_;
-    ak_mpzn256 a_, b_;  // coefficients of curve
+    ak_uint64 size_;    //
     ak_mpzn256 p_;      // modulo
     ak_mpzn256 q_;
     ProjecticPoint point_;
-    ak_uint64 n_;      // for Montgomery
+    ak_uint64 n_;       // for Montgomery
     ak_mpzn256 k2_;     // cofficient of proj curve
 };
+
+void mpzn_sub_mod(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p, const std::size_t& size);
 
 }
 

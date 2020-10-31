@@ -52,23 +52,6 @@ void mul256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p)
     ak_mpzn_set(res, ans_mod, ak_mpzn256_size);
 }
 
-void add256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p)
-{
-    ak_mpzn512 ans, lhs_big, rhs_big;
-    ak_mpzn_set_ui(lhs_big, ak_mpzn512_size, 0);
-    ak_mpzn_set_ui(rhs_big, ak_mpzn512_size, 0);
-    ak_mpzn_set(lhs_big, lhs, ak_mpzn256_size);
-    ak_mpzn_set(rhs_big, rhs, ak_mpzn256_size);
-    ak_mpzn_add(ans, lhs_big, rhs_big, ak_mpzn512_size);
-    ak_mpzn512 p_big;
-    ak_mpzn_set_ui(p_big, ak_mpzn512_size, 0);
-    ak_mpzn_set(p_big, p, ak_mpzn256_size);
-    ak_mpzn512 ans_mod;
-    ak_mpzn_set_ui(ans_mod, ak_mpzn512_size, 0);
-    rem512with256(ans_mod, ans, p_big);
-    ak_mpzn_set(res, ans_mod, ak_mpzn256_size);
-}
-
 void mpzn_sub_mod(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p, const std::size_t& size)
 {
     if (ak_mpzn_cmp(lhs, rhs, size) == 1)
@@ -123,7 +106,7 @@ ProjecticPoint Curve::add_points(ProjecticPoint& p1, ProjecticPoint& p2)
 
     mul256(term1, a3b1, a0b2,  p_);
     mul256(term2, a2b0, a1b3,  p_);
-    add256(x0, term1, term2, p_);            //x0=a3b1*a0b2 + a2b0*a1b3
+    ak_mpzn_add_montgomery(x0, term1, term2, p_, size_);           //x0=a3b1*a0b2 + a2b0*a1b3
 
     //should I clean term1 and term2?..
 
@@ -144,7 +127,7 @@ ProjecticPoint Curve::add_points(ProjecticPoint& p1, ProjecticPoint& p2)
 
     mul256(term1, a3b1, a3b1, p_);
     mul256(term2, a2b0, a2b0, p_);
-    add256(x3, term1, term2, p_);            //x3 = (a3b1)^2 + (a2b0)^2
+    ak_mpzn_add_montgomery(x3, term1, term2, p_, size_);            //x3 = (a3b1)^2 + (a2b0)^2
 
     return ProjecticPoint(x0, x1, x2, x3);
 };
@@ -170,12 +153,12 @@ void Curve::double_point(ProjecticPoint& p)
     mul256(a2a3_2, a2a3, a2a3, p_);
     mul256(a1a2_2, a1a2, a1a2, p_);
     mpzn_sub_mod(term4, a1a3_2, a2a3_2, p_, size_);
-    add256(_1, term4, a1a2_2, p_);
+    ak_mpzn_add_montgomery(_1, term4, a1a2_2, p_, size_);
 
     mpzn_sub_mod(term1, a2a3_2, a1a3_2, p_, size_);
-    add256(_2, term1, a1a2_2, p_);
+    ak_mpzn_add_montgomery(_2, term1, a1a2_2, p_, size_);
 
-    add256(term1, a2a3_2, a1a3_2, p_);
+    ak_mpzn_add_montgomery(term1, a2a3_2, a1a3_2, p_, size_);
     mpzn_sub_mod(_3, term1, a1a2_2, p_, size_);
 
     ak_mpzn_set(p.x0(), _0, size_);
@@ -198,9 +181,9 @@ bool Curve::point_is_ok(ProjecticPoint& point)
     mul256(x22, point.x2(), point.x2(), p_);
     mul256(x32, point.x3(), point.x3(), p_);
 
-    add256(term1, x02, x12, p_);
+    ak_mpzn_add_montgomery(term1, x02, x12, p_, size_);
     mul256(term2, k2_, x02, p_);
-    add256(term3, term2, x22, p_);
+    ak_mpzn_add_montgomery(term3, term2, x22, p_, size_);
 
     return (!ak_mpzn_cmp(term1, x32, size_)) && (!ak_mpzn_cmp(term3, x32, size_));
 };

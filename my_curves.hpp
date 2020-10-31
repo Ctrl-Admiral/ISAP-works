@@ -11,8 +11,6 @@ namespace my
 
 void mul256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p);
 
-void add256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p);
-
 class ProjecticPoint
 {
 public:
@@ -54,7 +52,6 @@ public:
     const ak_uint64* x3() const {  return x3_;  };
     ak_uint64* x3() { return x3_; }
 
-    //friend ProjecticPoint operator+ (ProjecticPoint& lhs, ProjecticPoint& rhs);
     friend bool operator== (ProjecticPoint& p1, ProjecticPoint& p2);
     friend std::ostream& operator<<(std::ostream& stream, ProjecticPoint& entry);
 

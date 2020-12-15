@@ -19,7 +19,6 @@ main()
     {
         std::cout << "SHA3-256 tests failed." << std::endl;
     }
-
     if(ak_hash_test_sha3_384() == ak_true)
     {
         std::cout << "SHA3-384 tests are OK." << std::endl;
@@ -28,7 +27,6 @@ main()
     {
         std::cout << "SHA3-384 tests failed." << std::endl;
     }
-
     if(ak_hash_test_sha3_512() == ak_true)
     {
         std::cout << "SHA3-512 tests are OK." << std::endl;
@@ -37,6 +35,7 @@ main()
     {
         std::cout << "SHA3-512 tests failed." << std::endl;
     }
+
 
 
     return 0;

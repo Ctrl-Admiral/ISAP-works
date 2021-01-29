@@ -43,26 +43,57 @@ int main()
 
     std::cout << "\nChecking if [q]P==0: ...";
     my::ProjecticPoint O(curve.point_pow(P, curve.q(), ak_mpzn256_size));
-    std::cout << "\n[q]P:\n" << O << '\n';
-    my::ProjecticPoint unit_point;
-    std::cout << std::boolalpha << (unit_point == O) << '\n';
 
-    std::cout << "\nChecking if [q+1]P==P: ...";
+    #ifndef NDEBUG
+    std::cout << "\n[q]P:\n" << O << '\n';
+    #endif
+
+    my::ProjecticPoint unit_point;
+    bool check_1 = (unit_point == O);
+
+    // Because of modulo we need additional check for last 3 coord-s,
+    // If they are same, all is right
+
+    if (check_1 ||
+            ((ak_mpzn_cmp(O.x1(), O.x2(), ak_mpzn256_size) == 0 ) &&
+             (ak_mpzn_cmp(O.x2(), O.x3(), ak_mpzn256_size) == 0)))
+    {
+        std::cout << "true\n";
+    }
+    else
+    {
+        std::cout << "false\n";
+    }
+
+
+    std::cout << "\nChecking if [q+1]P == P: ...";
     ak_mpzn256 q1;
     ak_mpzn256 one = { 0x0000000000000001LL, 0x0000000000000000LL, 0x0000000000000000LL, 0x0000000000000000LL };
     ak_mpzn_add_montgomery(q1, curve.q(), one, curve.p(), curve.size());
     my::ProjecticPoint P1(curve.point_pow(P, q1, ak_mpzn256_size));
-    std::cout << "\n[q+1]P:\n" << P1 << '\n';
-    std::cout << std::boolalpha << (P1 == P) << '\n';
 
-    std::cout << "\nChecking if [q-1]P==-P: ...";
+    #ifndef NDEBUG
+    std::cout << "\n[q+1]P:\n" << P1 << '\n';
+    #endif
+
+    my::ProjecticPoint P1_aff = curve.to_affine(P1);
+    my::ProjecticPoint P_aff = curve.to_affine(P);
+    std::cout << std::boolalpha << (P1_aff == P_aff) << '\n';
+
+    std::cout << "\nChecking if [q-1]P == -P: ...";
     ak_mpzn256 q2;
     my::mpzn_sub_mod(q2, curve.q(), one, curve.p(), ak_mpzn256_size);
     my::ProjecticPoint P2(curve.point_pow(P, q2, ak_mpzn256_size));
+
+    #ifndef NDEBUG
     std::cout << "\n[q-1]P:\n" << P2 << '\n';
+    #endif
+
     my::ProjecticPoint zero_point("0", "0", "0", "0");
+
     my::ProjecticPoint PP2(curve.add_points(P2, P));
-    std::cout << std::boolalpha << (PP2 == zero_point) << '\n';
+    my::ProjecticPoint PP2_aff = curve.to_affine(PP2);
+    std::cout << std::boolalpha << (PP2_aff == zero_point) << '\n';
 
     std::cout << "\nFor random k1, k2 checking [k1]P + [k2]P == [k1 + k2]P: ...";
     ak_mpzn256 k1, k2, k1k2;
@@ -73,7 +104,10 @@ int main()
     my::ProjecticPoint P12(curve.point_pow(P, k2, ak_mpzn256_size));
     my::ProjecticPoint P13(curve.point_pow(P, k1k2, ak_mpzn256_size));
     my::ProjecticPoint P11P12(curve.add_points(P11, P12));
-    std::cout << std::boolalpha << (P11P12 == P13) << '\n';
+
+    my::ProjecticPoint P11P12_aff = curve.to_affine(P11P12);
+    my::ProjecticPoint P13_aff = curve.to_affine(P13);
+    std::cout << std::boolalpha << (P11P12_aff == P13_aff) << '\n';
 
     return 0;
 }

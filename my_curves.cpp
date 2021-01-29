@@ -5,6 +5,36 @@
 namespace my
 {
 
+void eucl_for_mpzn256(ak_uint64* res, ak_uint64* num, ak_uint64* p)
+{
+    auto size = ak_mpzn256_size;
+    ak_mpzn256 P, Z, v, u, zero;
+    ak_mpzn_set_ui(zero, size, 0);
+    ak_mpzn_set_ui(v, size, 1);
+    ak_mpzn_set_ui(u, size, 0);
+    ak_mpzn_set(P, p, size);
+    ak_mpzn_set(Z, num, size);
+
+    while (ak_mpzn_cmp(Z, zero, size) && ak_mpzn_cmp(P, zero, size))
+    {
+        auto p_z_cmp = ak_mpzn_cmp(P, Z, size);
+        if (p_z_cmp == 0 || p_z_cmp == 1)
+        {
+            mpzn_sub_mod(P, P, Z, p, size);
+            mpzn_sub_mod(u, u, v, p, size);
+        }
+        else
+        {
+            mpzn_sub_mod(Z, Z, P, p, size);
+            mpzn_sub_mod(v, v, u, p, size);
+        }
+    }
+    if (ak_mpzn_cmp(P, zero, size))
+        ak_mpzn_set(res, u, size);
+    else
+        ak_mpzn_set(res, v, size);
+}
+
 void left(ak_uint64* r, const ak_uint64* from, size_t cnt)
 {
     for (size_t i = 0; i < cnt / 64; ++i)
@@ -112,7 +142,7 @@ ProjecticPoint Curve::add_points(ProjecticPoint& p1, ProjecticPoint& p2)
 
     mul256(term1, a3b1, a1b3,  p_);
     mul256(term2, a2b0, a0b2,  p_);
-    mpzn_sub_mod(x1, term1, term2, p_, ak_mpzn256_size);            //x1=a3b1*a1b3-a2b0-a0b2
+    mpzn_sub_mod(x1, term1, term2, p_, ak_mpzn256_size);            //x1=a3b1*a1b3-a2b0*a0b2
 
     mul256(term1, p1.x3(), p1.x2(), p_);
     mul256(term2, term1, p2.x3(), p_);
@@ -215,6 +245,37 @@ ProjecticPoint Curve::point_pow(ProjecticPoint& p, ak_uint64* k, const std::size
     }
 
     return Q;
+};
+
+ProjecticPoint Curve::to_affine(ProjecticPoint& p)
+{
+    ak_mpzn256 x, y, z, lambda, _1;
+    ak_mpzn_set_ui(_1, size_, 1);
+    mpzn_sub_mod(lambda, _1, k2_, p_, size_);
+
+    ak_mpzn256 x2_x3;
+    mpzn_sub_mod(x2_x3, p.x2(), p.x3(), p_, size_);
+    mul256(x, x2_x3, lambda, p_);
+
+    ak_mpzn256 x0labmda;
+    mul256(x0labmda, p.x0(), lambda, p_);
+    mul256(y, x0labmda, k2_, p_);
+
+    ak_mpzn256 x1k2, x3lambda;
+    mul256(x1k2, p.x1(), k2_, p_);
+    mul256(x3lambda, p.x3(), lambda, p_);
+    mpzn_sub_mod(z, x1k2, p.x2(), p_, size_);
+    ak_mpzn_add_montgomery(z, z, x3lambda, p_, size_);
+
+    ak_mpzn256 k;
+    eucl_for_mpzn256(k, z, p_);
+    mul256(x, x, k, p_);
+    mul256(y, y, k, p_);
+    mul256(z, z, k, p_);
+
+    ak_mpzn256 _0;
+    ak_mpzn_set_ui(_0, size_, 0);
+    return ProjecticPoint(x, y, z, _0);
 };
 
 }

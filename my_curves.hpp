@@ -10,6 +10,7 @@ namespace my
 {
 
 void mul256(ak_uint64* res, ak_uint64* lhs, ak_uint64* rhs, ak_uint64* p);
+void eucl_for_mpzn256(ak_uint64* res, ak_uint64* num, ak_uint64* p);
 
 class ProjecticPoint
 {
@@ -75,6 +76,9 @@ public:
         ak_mpzn_set(q_, q, ak_mpzn256_size);
         ak_mpzn_set_hexstr(k2, ak_mpzn256_size, k2_str);
         ak_mpzn_set(k2_, k2, ak_mpzn256_size);
+//        ak_mpzn256 _4;
+//        ak_mpzn_set_ui(_4, ak_mpzn256_size, 4);
+//        mul256(q4_, q_, _4, p_);
     }
 
     ak_uint64 size() const { return size_; }
@@ -82,6 +86,8 @@ public:
     ak_uint64* p() { return p_; }
     const ak_uint64* q() const { return q_; }
     ak_uint64* q() { return q_; }
+//    const ak_uint64* q4() const { return q4_; }
+//    ak_uint64* q4() { return q4_; }
     const ak_uint64* k2() const { return k2_; }
     ak_uint64* k2() { return k2_; }
 
@@ -98,11 +104,13 @@ public:
     void double_point(ProjecticPoint& p);
     bool point_is_ok(ProjecticPoint& point);
     ProjecticPoint point_pow(ProjecticPoint& p, ak_uint64* k, const std::size_t& size);
+    ProjecticPoint to_affine(ProjecticPoint& p);
 
 private:
     ak_uint64 size_;    //
     ak_mpzn256 p_;      // modulo
     ak_mpzn256 q_;
+//    ak_mpzn256 q4_;
     ProjecticPoint point_;
     ak_mpzn256 k2_;     // cofficient of proj curve
 };
